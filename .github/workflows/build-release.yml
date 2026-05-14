@@ -22,21 +22,15 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build Release APK
-      run: ./gradlew assembleRelease
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug
 
-    - name: Sign APK
-      uses: r0adkll/sign-android-release@v1
-      with:
-        releaseDirectory: app/build/outputs/apk/release
-        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-        alias: ${{ secrets.ALIAS }}
-        storePassword: ${{ secrets.STORE_PASSWORD }}
-        keyPassword: ${{ secrets.KEY_PASSWORD }}
+    - name: Rename APK
+      run: mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/vmq-${{ github.ref_name }}.apk
 
     - name: Upload Release APK
       uses: softprops/action-gh-release@v1
       with:
-        files: app/build/outputs/apk/release/app-release-unsigned.apk
+        files: app/build/outputs/apk/debug/vmq-${{ github.ref_name }}.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
