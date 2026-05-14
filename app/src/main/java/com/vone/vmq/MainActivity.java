@@ -208,6 +208,13 @@ public class MainActivity extends AppCompatActivity{
     }
     //检测监听
     public void checkPush(View v){
+        // Android 13+ 需要动态申请通知权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1001);
+                return;
+            }
+        }
 
         Notification mNotification;
         NotificationManager mNotificationManager;
@@ -239,7 +246,7 @@ public class MainActivity extends AppCompatActivity{
                     .build();
         }
 
-        //Toast.makeText(MainActivity.this, "已推送信息，如果权限，那么将会有下一条提示！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "已发送测试通知，请查看通知栏和Toast提示", Toast.LENGTH_SHORT).show();
 
 
 
@@ -400,6 +407,16 @@ public class MainActivity extends AppCompatActivity{
                 } else {
                     // 被禁止授权
                     Toast.makeText(MainActivity.this, "请至权限中心打开本应用的文件读写权限", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case 1001:
+                // 通知权限申请
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 获得授权，重新调用检测监听
+                    checkPush(null);
+                } else {
+                    // 被禁止授权
+                    Toast.makeText(MainActivity.this, "请至权限中心打开本应用的通知权限", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
