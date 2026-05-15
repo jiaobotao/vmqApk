@@ -77,6 +77,17 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+        // 请求存储权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                }, 1002);
+            }
+        }
+
         //检测通知使用权是否启用
         if (!isNotificationListenersEnabled()) {
             //跳转到通知使用权页面
