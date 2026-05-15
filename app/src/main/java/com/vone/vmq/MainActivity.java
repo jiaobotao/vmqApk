@@ -29,6 +29,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
+import com.vone.qrcode.BuildConfig;
+import android.widget.Toast;
 
 import com.vone.qrcode.R;
 import com.vone.vmq.util.Constant;
