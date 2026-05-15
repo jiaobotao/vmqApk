@@ -121,6 +121,17 @@ public class NeNotificationService2  extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         Log.d(TAG, "接受到通知消息");
+
+        // 写入文件日志
+        try {
+            String logMsg = "[" + new Date() + "] 接收到通知: " + sbn.getPackageName() + "\n";
+            java.io.FileWriter fw = new java.io.FileWriter(getExternalFilesDir(null) + "/notification_log.txt", true);
+            fw.write(logMsg);
+            fw.close();
+        } catch (Exception e) {
+            Log.e(TAG, "写入日志失败: " + e.getMessage());
+        }
+
         SharedPreferences read = getSharedPreferences("vone", MODE_PRIVATE);
         host = read.getString("host", "");
         key = read.getString("key", "");
@@ -138,6 +149,16 @@ public class NeNotificationService2  extends NotificationListenerService {
                 Log.d(TAG, "标题:" + title);
                 Log.d(TAG, "内容:" + content);
                 Log.d(TAG, "**********************");
+
+                // 写入详细日志到文件
+                try {
+                    String detailLog = "[" + new Date() + "] 包名:" + pkg + " 标题:" + title + " 内容:" + content + "\n";
+                    java.io.FileWriter fw = new java.io.FileWriter(getExternalFilesDir(null) + "/notification_log.txt", true);
+                    fw.write(detailLog);
+                    fw.close();
+                } catch (Exception e) {
+                    Log.e(TAG, "写入详细日志失败: " + e.getMessage());
+                }
 
 
                 if (pkg.equals("com.eg.android.AlipayGphone")){
