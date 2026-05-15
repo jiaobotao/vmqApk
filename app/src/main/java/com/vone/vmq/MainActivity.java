@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity{
         }
 
 
-        Toast.makeText(MainActivity.this, "v免签开源免费免签系统 v1.8.1", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "v免签开源免费免签系统 v" + BuildConfig.VERSION_NAME, Toast.LENGTH_SHORT).show();
 
 
     }
@@ -184,9 +184,15 @@ public class MainActivity extends AppCompatActivity{
             return;
         }
 
-
         String t = String.valueOf(new Date().getTime());
         String sign = md5(t+key);
+
+        // 调试日志
+        Log.d("V免签", "心跳检测 - host: " + host);
+        Log.d("V免签", "心跳检测 - key: " + key);
+        Log.d("V免签", "心跳检测 - t: " + t);
+        Log.d("V免签", "心跳检测 - sign: " + sign);
+        Log.d("V免签", "心跳检测 - URL: http://" + host + "/appHeart?t=" + t + "&sign=" + sign);
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder().url("http://"+host+"/appHeart?t="+t+"&sign="+sign).method("GET",null).build();
@@ -194,14 +200,17 @@ public class MainActivity extends AppCompatActivity{
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                Log.e("V免签", "心跳失败: " + e.getMessage());
                 Looper.prepare();
                 Toast.makeText(MainActivity.this, "心跳状态错误，请检查配置是否正确!", Toast.LENGTH_SHORT).show();
                 Looper.loop();
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                Log.d("V免签", "心跳返回: " + responseBody);
                 Looper.prepare();
-                Toast.makeText(MainActivity.this, "心跳返回："+response.body().string(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "心跳返回："+responseBody, Toast.LENGTH_LONG).show();
                 Looper.loop();
             }
         });
