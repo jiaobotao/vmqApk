@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.CAMERA" /> <!-- 摄像头权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- 通知权限 (Android 13+) -->
+    <uses-permission android:name="android.permission.RECEIVE_SENSITIVE_NOTIFICATIONS" /> <!-- 接收敏感通知权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
