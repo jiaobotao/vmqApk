@@ -119,19 +119,10 @@ public class MainActivity extends AppCompatActivity{
 
     //扫码配置
     public void startQrCode(View v) {
-        // 申请相机权限
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            // 申请权限
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, Constant.REQ_PERM_CAMERA);
             return;
         }
-        // 申请文件读写权限（部分朋友遇到相册选图需要读写权限的情况，这里一并写一下）
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // 申请权限
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.REQ_PERM_EXTERNAL_STORAGE);
-            return;
-        }
-        // 二维码扫码
         Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
         startActivityForResult(intent, Constant.REQ_QR_CODE);
     }
