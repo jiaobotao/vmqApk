@@ -168,26 +168,30 @@ public class NeNotificationService2  extends NotificationListenerService {
 
 
                 if (pkg.equals("com.eg.android.AlipayGphone")){
-                    if (content!=null && !content.equals("")) {
-                        if (content.indexOf("通过扫码向你付款")!=-1 || content.indexOf("成功收款")!=-1
-                                || content.indexOf("向你付款")!=-1 || content.indexOf("收款成功")!=-1){
-                            String money = getMoney(content);
-                            if (money!=null){
-                                Log.d(TAG, "onAccessibilityEvent: 匹配成功： 支付宝 到账 " + money);
-                                appPush(2, Double.valueOf(money));
-                            }else {
-                                Handler handlerThree=new Handler(Looper.getMainLooper());
-                                handlerThree.post(new Runnable(){
-                                    public void run(){
-                                        Toast.makeText(getApplicationContext() ,"监听到支付宝消息但未匹配到金额！",Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        }
-
+                    // 优先从标题匹配（新版支付宝收款通知金额在标题里）
+                    String alipayText = null;
+                    if (title != null && (title.indexOf("成功收款") != -1 || title.indexOf("收款成功") != -1
+                            || title.indexOf("向你付款") != -1 || title.indexOf("通过扫码向你付款") != -1)) {
+                        alipayText = title;
+                    } else if (content != null && !content.isEmpty()
+                            && (content.indexOf("通过扫码向你付款") != -1 || content.indexOf("成功收款") != -1
+                            || content.indexOf("向你付款") != -1 || content.indexOf("收款成功") != -1)) {
+                        alipayText = content;
                     }
-
-                }else if(pkg.equals("com.tencent.mm")){
+                    if (alipayText != null) {
+                        String money = getMoney(alipayText);
+                        if (money != null) {
+                            Log.d(TAG, "onAccessibilityEvent: 匹配成功： 支付宝 到账 " + money);
+                            appPush(2, Double.valueOf(money));
+                        } else {
+                            Handler handlerThree = new Handler(Looper.getMainLooper());
+                            handlerThree.post(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "监听到支付宝消息但未匹配到金额！", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }else if(pkg.equals("com.tencent.mm")){
 
                     if (content!=null && !content.equals("")){
                         if (title.equals("微信支付") || title.equals("微信收款助手") || title.equals("微信收款商业版")){
