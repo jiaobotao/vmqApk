@@ -191,7 +191,8 @@ public class NeNotificationService2  extends NotificationListenerService {
                                 }
                             });
                         }
-                    }else if(pkg.equals("com.tencent.mm")){
+                    }
+                }else if(pkg.equals("com.tencent.mm")){
 
                     if (content!=null && !content.equals("")){
                         if (title.equals("微信支付") || title.equals("微信收款助手") || title.equals("微信收款商业版")){
