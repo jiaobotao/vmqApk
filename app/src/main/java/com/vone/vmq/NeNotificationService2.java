@@ -142,8 +142,14 @@ public class NeNotificationService2  extends NotificationListenerService {
         if (notification != null) {
             Bundle extras = notification.extras;
             if (extras != null) {
-                String title = extras.getString(NotificationCompat.EXTRA_TITLE, "");
-                String content = extras.getString(NotificationCompat.EXTRA_TEXT, "");
+                CharSequence titleCs = extras.getCharSequence(NotificationCompat.EXTRA_TITLE);
+                String title = titleCs != null ? titleCs.toString() : "";
+                CharSequence contentCs = extras.getCharSequence(NotificationCompat.EXTRA_TEXT);
+                String content = contentCs != null ? contentCs.toString() : "";
+                if (content.isEmpty()) {
+                    CharSequence bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT);
+                    if (bigText != null) content = bigText.toString();
+                }
                 Log.d(TAG, "**********************");
                 Log.d(TAG, "包名:" + pkg);
                 Log.d(TAG, "标题:" + title);
@@ -163,7 +169,8 @@ public class NeNotificationService2  extends NotificationListenerService {
 
                 if (pkg.equals("com.eg.android.AlipayGphone")){
                     if (content!=null && !content.equals("")) {
-                        if (content.indexOf("通过扫码向你付款")!=-1 || content.indexOf("成功收款")!=-1){
+                        if (content.indexOf("通过扫码向你付款")!=-1 || content.indexOf("成功收款")!=-1
+                                || content.indexOf("向你付款")!=-1 || content.indexOf("收款成功")!=-1){
                             String money = getMoney(content);
                             if (money!=null){
                                 Log.d(TAG, "onAccessibilityEvent: 匹配成功： 支付宝 到账 " + money);
