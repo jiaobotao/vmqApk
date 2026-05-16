@@ -216,17 +216,13 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("V免签", "心跳失败: " + e.getMessage());
-                Looper.prepare();
-                Toast.makeText(MainActivity.this, "心跳状态错误，请检查配置是否正确!", Toast.LENGTH_SHORT).show();
-                Looper.loop();
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "心跳状态错误，请检查配置是否正确!", Toast.LENGTH_SHORT).show());
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseBody = response.body().string();
                 Log.d("V免签", "心跳返回: " + responseBody);
-                Looper.prepare();
-                Toast.makeText(MainActivity.this, "心跳返回："+responseBody, Toast.LENGTH_LONG).show();
-                Looper.loop();
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "心跳返回：" + responseBody, Toast.LENGTH_LONG).show());
             }
         });
     }
